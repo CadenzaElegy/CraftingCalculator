@@ -58,10 +58,10 @@ function calculateIngredients() {
   var properOrder = formRecipeOrder(dbArray, shortOrder);
 
   //  With the completed ingredient list and recipe list in correct order, clear the previous results and output the new ones.
-  //  Clear the Ingredient List
+  //  Clear the Ingredient List and Recipe List
   clearRect(inputSheet, 2, 4, 100, 2);
-  //  Clear the Recipe List
-  clearRect(inputSheet, 8, 4, 100, 2);
+  clearRect(inputSheet, 2, 8, 100, 3);
+  //  Print the Ingredient List and Recipe List
   printToCells(inputSheet, 3, 5, shortList);
   printToCells(inputSheet, 3, 9, properOrder);
 
