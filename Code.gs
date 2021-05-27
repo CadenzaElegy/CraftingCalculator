@@ -11,11 +11,13 @@ var ingredientList = [];
 var recipeList = [];
 
 //  Unused, may not be necessary at all
+/*
 function refreshDatabase() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
   var dbSheet = spreadsheet.getSheetByName("Database Import");
   dbSheet.getRange(1,1).setValues('=IMPORTRANGE(Input!B1, "A:D")');
 }
+*/
 
 function calculateIngredients() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
@@ -56,9 +58,12 @@ function calculateIngredients() {
   var properOrder = formRecipeOrder(dbArray, shortOrder);
 
   //  With the completed ingredient list and recipe list in correct order, clear the previous results and output the new ones.
-  clearRect(inputSheet, 2, 4, 100, 6);
+  //  Clear the Ingredient List
+  clearRect(inputSheet, 2, 4, 100, 2);
+  //  Clear the Recipe List
+  clearRect(inputSheet, 8, 4, 100, 2);
   printToCells(inputSheet, 3, 5, shortList);
-  printToCells(inputSheet, 3, 8, properOrder);
+  printToCells(inputSheet, 3, 9, properOrder);
 
 }
 
