@@ -10,13 +10,19 @@
 var ingredientList = [];
 var recipeList = [];
 
+//  Unused, may not be necessary at all
+function refreshDatabase() {
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+  var dbSheet = spreadsheet.getSheetByName("Database Import");
+  dbSheet.getRange(1,1).setValues('=IMPORTRANGE(Input!B1, "A:D")');
+}
+
 function calculateIngredients() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   // Declare all the relevant sheets as variables
-  var inputSheet = ss.getSheetByName("Input");
-  var gameName = inputSheet.getRange("B1").getValue();
-  var dbSheet = ss.getSheetByName(gameName);
+  var inputSheet = spreadsheet.getSheetByName("Input");
+  var dbSheet = spreadsheet.getSheetByName("Database Import");
 
   // Create an array of the database so that we won't have to constantly perform lookups on the sheet
   var dbArray = dbSheet.getDataRange().getValues();  
