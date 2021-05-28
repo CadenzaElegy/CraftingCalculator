@@ -69,7 +69,7 @@ function calculateIngredients() {
 
 //  Function returns index (row #) of itemName in a given array (db)'s SPECIFIC column number (col).
 function getIndexOf(db, col, itemName){
-  for (let i = col; i < db.length; i++) {
+  for (let i = 0; i < db.length; i++) {
     if (db[i][col] === itemName) {
       return i;
     }
@@ -133,9 +133,9 @@ function formRecipeList(db, itemName, itemQuant) {
   //  if "I" (Ingredient), then do nothing
   //  if "R" (Recipe), then add correct # of recipes to recipeList and recursively drill down until all recipes are logged.
     while (db[pointer][1] === "R" || db[pointer][1] === "I"){
-    if (db[pointer][1] === "R"){
-      recipeList.push([db[pointer][2], db[pointer][3]*itemQuant]);
-      formRecipeList(db, db[pointer][2], db[pointer][3]*itemQuant);
+      if (db[pointer][1] === "R"){
+        recipeList.push([db[pointer][2], db[pointer][3]*itemQuant]);
+        formRecipeList(db, db[pointer][2], db[pointer][3]*itemQuant);
     }
     pointer++;
   }
@@ -170,14 +170,14 @@ function formRecipeOrder(db, recipeList){
           break;
         }
       }
-      
+
       //  Step 2
       if (craftable === true){
         craftingOrder++;
         craftedRecipes.push([craftingOrder, uncraftedRecipes[i][0], uncraftedRecipes[i][1]]);
         //  replace all occurrences of crafted item as an ingredient in duplicateDB
         for (let j = 0; j < duplicateDB.length; j++){
-          if (duplicateDB[j][2] === uncraftedRecipes[i][0]){
+          if (duplicateDB[j][2] === uncraftedRecipes[i][0] && duplicateDB[j][1] === "R"){
             duplicateDB[j][1] = "I";
           }
         }
