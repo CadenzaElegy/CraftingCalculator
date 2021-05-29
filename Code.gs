@@ -118,6 +118,11 @@ function formIngredientList(db, itemName, itemQuant) {
 }
 
 //  Function acts similarly to formIngredientList, but instead collects quantities of recipes required to craft.
+//  THIS IMPLEMENTATION IS JANKY AND NOT AS MATERIAL EFFICIENT AS IT COULD BE (?)
+//  NEED TO WRITE A NEW FUNCTION TO TAKE RAW FRACTIONAL VALUES AND ROUND UP INSTEAD
+//    Revert/remove newQuant and use db[pointer][3]*itemQuant like old version
+//    Run the new list through a new function and use that new rounded up recipelist for crafting.
+//    The new recipelist should also be the one used for the ingredients list for a more tighter ingredient list.
 function formRecipeList(db, itemName, itemQuant) {
   //  Lookup the array to find the required item, then move pointer to next row
   var pointer = getIndexOf(db, 1, itemName);
@@ -185,4 +190,22 @@ function formRecipeOrder(db, recipeList){
     //  Step 4
   }
   return craftedRecipes;
+}
+
+//  Function clears the column of checkboxes in the Ingredients List by setting all values of column D3:D to false
+function clearIngChecks(){
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(3, 4, 996, 1).setValue(false);
+}
+
+//  Function clears the column of checkboxes in the Recipe List by setting all values of column H3:H to false
+function clearRecChecks(){
+  SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(3, 8, 996, 1).setValue(false);
+}
+
+//  Function clears the Input box by setting B3:C12 to ""
+function clearInputs(){
+  if (SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(12,1).getValue()===true){
+    SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(3, 2, 10, 2).setValue("");
+    SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(12,1).setValue(false);
+  }
 }
