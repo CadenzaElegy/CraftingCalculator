@@ -10,15 +10,6 @@
 var ingredientList = [];
 var recipeList = [];
 
-//  Unused, may not be necessary at all
-/*
-function refreshDatabase() {
-  var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
-  var dbSheet = spreadsheet.getSheetByName("Database Import");
-  dbSheet.getRange(1,1).setValues('=IMPORTRANGE(Input!B1, "A:D")');
-}
-*/
-
 function calculateIngredients() {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
@@ -108,16 +99,19 @@ function printToCells(sheet, desRow, desCol, arr){
 function formIngredientList(db, itemName, itemQuant) {
   //  Lookup the array to find the required item, then move pointer to next row
   var pointer = getIndexOf(db, 1, itemName);
+  var origPointer = getIndexOf(db, 1, itemName);
+  var newQuant = Math.ceil(itemQuant/db[origPointer][3])
   pointer++;
 
   //  WHILE pointer row is an "I" or "R",
   //  if "I" (Ingredient), add to ingredientList
   //  if "R" (Recipe), recursively drill down until all ingredients are found and added to list in correct quantities.
+  //  EDIT (2021-05-28): Modified to handle multiple outputs of a singular recipe.
   while (db[pointer][1] === "R" || db[pointer][1] === "I"){
     if (db[pointer][1] === "I"){
-      ingredientList.push([db[pointer][2], db[pointer][3]*itemQuant]);
+      ingredientList.push([db[pointer][2], db[pointer][3]*newQuant]);
     } else if (db[pointer][1] === "R"){
-      formIngredientList(db, db[pointer][2], db[pointer][3]*itemQuant);
+      formIngredientList(db, db[pointer][2], db[pointer][3]*newQuant);
     }
     pointer++;
   }
@@ -127,6 +121,8 @@ function formIngredientList(db, itemName, itemQuant) {
 function formRecipeList(db, itemName, itemQuant) {
   //  Lookup the array to find the required item, then move pointer to next row
   var pointer = getIndexOf(db, 1, itemName);
+  var origPointer = getIndexOf(db, 1, itemName);
+  var newQuant = Math.ceil(itemQuant/db[origPointer][3])
   pointer++;
 
   //  WHILE pointer row is an "I" or "R",
@@ -134,8 +130,8 @@ function formRecipeList(db, itemName, itemQuant) {
   //  if "R" (Recipe), then add correct # of recipes to recipeList and recursively drill down until all recipes are logged.
     while (db[pointer][1] === "R" || db[pointer][1] === "I"){
       if (db[pointer][1] === "R"){
-        recipeList.push([db[pointer][2], db[pointer][3]*itemQuant]);
-        formRecipeList(db, db[pointer][2], db[pointer][3]*itemQuant);
+        recipeList.push([db[pointer][2], db[pointer][3]*newQuant]);
+        formRecipeList(db, db[pointer][2], db[pointer][3]*newQuant);
     }
     pointer++;
   }
