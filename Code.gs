@@ -10,11 +10,28 @@
 var ingredientList = [];
 var recipeList = [];
 
-function calculateIngredients() {
+// Declaring individual functions for separate buttons
+function calc1() {
+  calculateIngredients("Calc1");
+}
+function calc2() {
+  calculateIngredients("Calc2");
+}
+function calc3() {
+  calculateIngredients("Calc3");
+}
+function calc4() {
+  calculateIngredients("Calc4");
+}
+function calc5() {
+  calculateIngredients("Calc5");
+}
+
+function calculateIngredients(sheetName) {
   var spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
 
   // Declare all the relevant sheets as variables
-  var inputSheet = spreadsheet.getSheetByName("Input");
+  var inputSheet = spreadsheet.getSheetByName(sheetName);
   var dbSheet = spreadsheet.getSheetByName("Database Import");
 
   // Create an array of the database so that we won't have to constantly perform lookups on the sheet
@@ -160,6 +177,7 @@ function formRecipeOrder(db, recipeList){
     for (var i = uncraftedRecipes.length-1; i >= 0; i--) {
       var pointer = getIndexOf(duplicateDB, 1, uncraftedRecipes[i][0])
       var craftable = true;
+      console.log(uncraftedRecipes[i]) //test
       pointer++;
 
       //  Step 1
@@ -194,18 +212,23 @@ function formRecipeOrder(db, recipeList){
 
 //  Function clears the column of checkboxes in the Ingredients List by setting all values of column D3:D to false
 function clearIngChecks(){
-  SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(3, 4, 996, 1).setValue(false);
+  SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(3, 4, 996, 1).setValue(false);
 }
 
 //  Function clears the column of checkboxes in the Recipe List by setting all values of column H3:H to false
 function clearRecChecks(){
-  SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(3, 8, 996, 1).setValue(false);
+  SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(3, 8, 996, 1).setValue(false);
 }
 
 //  Function clears the Input box by setting B3:C12 to ""
+//  Not sure if function should clear the whole sheet... seems unnecessary.
 function clearInputs(){
-  if (SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(12,1).getValue()===true){
-    SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(3, 2, 10, 2).setValue("");
-    SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Input").getRange(12,1).setValue(false);
+  if (SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(12,1).getValue()===true){
+    SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(3, 2, 10, 2).clearContent();
+    SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(3, 5, 100, 2).clearContent();
+    SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(3, 9, 100, 3).clearContent();
+    SpreadsheetApp.getActiveSpreadsheet().getActiveSheet().getRange(12,1).setValue(false);
+    clearIngChecks();
+    clearRecChecks();
   }
 }
